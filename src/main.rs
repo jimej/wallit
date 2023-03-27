@@ -14,13 +14,14 @@ fn main() {
     }
 
     let cm = wallit::CipherMaterial::default();
-    let res = cm.encrypt("input"); // Ok(s), can't conver to UTF-8
+    let input = "input hello";
+    let res = cm.encrypt(input); // Ok(s), encrypted text can't conver to UTF-8 from bytes
     println!("encryption success: {}", res.is_ok());
     // println!("encrypted text: {}", std::str::from_utf8(&res).unwrap());
     if let Ok(secret) = res {
         println!("encrypted text: {:?}", secret);
         let out = cm.decrypt(secret).unwrap();
-        assert_eq!(&out, b"input");
+        assert_eq!(&out, input.as_bytes());
         println!("after decryption: {}", std::str::from_utf8(&out).unwrap());
     }
 }
