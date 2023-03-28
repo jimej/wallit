@@ -118,3 +118,15 @@ pub fn add_company(conn: &mut SqliteConnection, company_id: &str, url: &str) -> 
         .execute(conn) // get_results doesn't work with sqlite
         .expect("Failed to create new post")
 }
+
+pub fn add_login(conn: &mut SqliteConnection, login: &NewLogin) -> usize {
+    use crate::schema::logins;
+    use models::*;
+
+    // let new_company = NewCompany { company_id, url };
+
+    diesel::insert_into(logins::table)
+        .values(login)
+        .execute(conn) // get_results doesn't work with sqlite
+        .expect("Failed to create new post")
+}

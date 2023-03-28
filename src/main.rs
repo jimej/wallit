@@ -48,4 +48,15 @@ fn main() {
 
     let _res = add_company(&mut conn, "etrade", "https://www.etrade.com");
     println!("number of companies added: {}", _res);
+
+    use self::models::NewLogin;
+
+    let new_login = &NewLogin {
+        company_id: "citibank",
+        username: "abc452",
+        password: "zk$j7gq-0h",
+        email: "t9frq@awsai.io",
+        history_id: 1,
+    };
+    add_login(&mut conn, new_login);
 }
