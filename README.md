@@ -7,3 +7,7 @@ cargo run -- -V
 
 cargo run -- add -k x -v y
 cargo run -- -d add -k x -v y
+
+add .env, then diesel setup
+diesel migration generate ..
+sqlite3 -> .help -> .open crud.db -> select * from companies -> .quit

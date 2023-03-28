@@ -1,5 +1,6 @@
 use clap::Parser;
-use wallit::{self, Args, Commands};
+// use wallit::{self, Args, Commands};
+use wallit::*;
 fn main() {
     println!("Hello, world!");
     let args = Args::parse();
@@ -24,4 +25,27 @@ fn main() {
         assert_eq!(&out, input.as_bytes());
         println!("after decryption: {}", std::str::from_utf8(&out).unwrap());
     }
+
+    let _pool = get_connection_pool();
+    let mut conn = _pool.get().unwrap();
+    use self::schema::companies::dsl::*;
+    use diesel::prelude::*;
+    let records = vec![
+        (company_id.eq("citibank"), url.eq("https://citi.com")),
+        (
+            company_id.eq("discover"),
+            url.eq("https://discoverbank.com"),
+        ),
+    ];
+
+    let _res = diesel::insert_into(companies)
+        .values(&records)
+        .execute(&mut conn);
+    match _res {
+        Err(e) => println!("{e}"),
+        Ok(_) => println!("great!!!!"),
+    }
+
+    let _res = add_company(&mut conn, "etrade", "https://www.etrade.com");
+    println!("number of companies added: {}", _res);
 }
