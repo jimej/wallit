@@ -35,27 +35,6 @@ pub enum Commands {
     Delete {},
 }
 
-// pub fn generate_cypher() -> (Aes256GcmSiv, Nonce) {
-//     let key = Aes256GcmSiv::generate_key(&mut OsRng);
-//     let cipher = Aes256GcmSiv::new(&key);
-//     let nonce = Aes256GcmSiv::generate_nonce(&mut OsRng); // 96-bits; unique per message
-//     (cipher, nonce)
-// }
-
-// pub fn encrypt(input: &str) -> Result<Vec<u8>, aes_gcm_siv::Error> {
-//     let (cipher, nonce) = generate_cypher();
-
-//     let ciphertext = cipher.encrypt(&nonce, input.as_bytes().as_ref())?;
-//     Ok(ciphertext)
-// }
-
-// pub fn decrypt(ciphertext: &[u8]) -> Result<Vec<u8>, aes_gcm_siv::Error> {
-//     let (cipher, nonce) = generate_cypher();
-//     let plaintext = cipher.decrypt(&nonce, ciphertext.as_ref())?; // aes_gcm_siv::Error is not std::error::Error
-//     assert_eq!(&plaintext, b"plaintext message");
-//     Ok(plaintext)
-// }
-
 pub struct CipherMaterial {
     cipher: Aes256GcmSiv,
     nonce: Nonce,
@@ -91,6 +70,7 @@ impl Default for CipherMaterial {
 
 pub mod models;
 pub mod schema;
+mod table_ops;
 
 use diesel::prelude::*;
 use diesel::r2d2::{ConnectionManager, Pool};
@@ -133,20 +113,13 @@ pub fn add_login(conn: &mut SqliteConnection, login: &NewLogin) -> usize {
         .execute(conn) // get_results doesn't work with sqlite
         .expect("Failed to create new post")
 }
-// use models::*;
-// use crate::*;
+
 use self::schema::logins::dsl::*;
-// use diesel::prelude::*;
-// use self::models::Login;
+
 pub fn reveal(conn: &mut SqliteConnection, company: &str) -> Vec<Login> {
-    // use crate::schema::logins;
-    // use models::Login;
-    // use self::schema::logins::dsl::*;
-    // use diesel::prelude::*;
     logins
         .filter(company_id.eq(company))
         .limit(1)
         .load::<Login>(conn)
         .expect("Error loading login")
-    // _results
 }
