@@ -112,7 +112,10 @@ pub fn add_company(conn: &mut SqliteConnection, companyid: &str, url: &str) -> u
     use crate::schema::companies;
     use models::*;
 
-    let new_company = NewCompany { company_id: companyid, url };
+    let new_company = NewCompany {
+        company_id: companyid,
+        url,
+    };
     diesel::insert_into(companies::table)
         .values(&new_company)
         .execute(conn) // get_results doesn't work with sqlite
@@ -140,10 +143,10 @@ pub fn reveal(conn: &mut SqliteConnection, company: &str) -> Vec<Login> {
     // use models::Login;
     // use self::schema::logins::dsl::*;
     // use diesel::prelude::*;
-    let _results = logins
+    logins
         .filter(company_id.eq(company))
         .limit(1)
         .load::<Login>(conn)
-        .expect("Error loading login");
-    _results
+        .expect("Error loading login")
+    // _results
 }

@@ -51,7 +51,10 @@ fn main() {
     println!("number of companies added: {}", _res);
 
     use self::models::NewLogin;
-    let orig = &general_purpose::STANDARD_NO_PAD.encode(b"zk$j7gq-0h");
+
+    let p = "zk$j7gq-0h";
+    let enc = cm.encrypt(p).unwrap();
+    let orig = &general_purpose::STANDARD_NO_PAD.encode(enc);
     let new_login = &NewLogin {
         company_id: "citibank",
         username: "abc452",
@@ -63,9 +66,10 @@ fn main() {
     let res = reveal(&mut conn, "citibank");
     for l in res {
         println!("username {}", l.username);
-        let out = &general_purpose::STANDARD_NO_PAD.decode(l.password).unwrap();
+        let decoded = general_purpose::STANDARD_NO_PAD.decode(l.password).unwrap();
+        let outcome = cm.decrypt(decoded).unwrap();
         // assert_eq!(b"zk$j7gq-0h", out);
-        println!("after decoding: {}", std::str::from_utf8(out).unwrap());
+        println!("after decoding: {}", std::str::from_utf8(&outcome).unwrap());
 
         println!("username {}", l.email);
     }

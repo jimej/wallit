@@ -17,7 +17,7 @@ pub struct NewCompany<'a> {
 
 #[derive(Queryable)]
 pub struct Login {
-    pub id: i32,  // u32 has issues for reveal()
+    pub id: i32, // u32 has issues for reveal()
     pub company_id: String,
     pub username: String,
     pub password: String,
