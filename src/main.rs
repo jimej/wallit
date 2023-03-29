@@ -51,7 +51,7 @@ fn main() {
     let _res = add_company(&mut conn, "etrade", "https://www.etrade.com");
     println!("number of companies added: {}", _res);
 
-    use self::models::NewLogin;
+    use table_ops::logins::models::NewLogin;
 
     let p = "zk$j7gq-0h";
     let enc = cm.encrypt(p).unwrap();
@@ -63,6 +63,7 @@ fn main() {
         email: "t9frq@awsai.io",
         history_id: 1,
     };
+    use table_ops::logins::actions::{add_login, reveal};
     add_login(&mut conn, new_login);
     let res = reveal(&mut conn, "citibank");
     for l in res {
