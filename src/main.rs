@@ -2,6 +2,7 @@ use clap::Parser;
 // use wallit::{self, Args, Commands};
 use base64::engine::{general_purpose, Engine as _};
 use wallit::*;
+mod table_ops;
 fn main() {
     println!("Hello, world!");
     let args = Args::parse();
@@ -46,7 +47,7 @@ fn main() {
         Err(e) => println!("{e}"),
         Ok(_) => println!("great!!!!"),
     }
-
+    use table_ops::companies::actions::add_company;
     let _res = add_company(&mut conn, "etrade", "https://www.etrade.com");
     println!("number of companies added: {}", _res);
 

@@ -88,20 +88,6 @@ pub fn get_connection_pool() -> Pool<ConnectionManager<SqliteConnection>> {
         .expect("could not build connection pool")
 }
 
-pub fn add_company(conn: &mut SqliteConnection, companyid: &str, url: &str) -> usize {
-    use crate::schema::companies;
-    use models::*;
-
-    let new_company = NewCompany {
-        company_id: companyid,
-        url,
-    };
-    diesel::insert_into(companies::table)
-        .values(&new_company)
-        .execute(conn) // get_results doesn't work with sqlite
-        .expect("Failed to create new post")
-}
-
 pub fn add_login(conn: &mut SqliteConnection, login: &NewLogin) -> usize {
     use crate::schema::logins;
     use models::*;
