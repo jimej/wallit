@@ -108,11 +108,11 @@ pub fn get_connection_pool() -> Pool<ConnectionManager<SqliteConnection>> {
         .expect("could not build connection pool")
 }
 
-pub fn add_company(conn: &mut SqliteConnection, company_id: &str, url: &str) -> usize {
+pub fn add_company(conn: &mut SqliteConnection, companyid: &str, url: &str) -> usize {
     use crate::schema::companies;
     use models::*;
 
-    let new_company = NewCompany { company_id, url };
+    let new_company = NewCompany { company_id: companyid, url };
     diesel::insert_into(companies::table)
         .values(&new_company)
         .execute(conn) // get_results doesn't work with sqlite
@@ -129,4 +129,21 @@ pub fn add_login(conn: &mut SqliteConnection, login: &NewLogin) -> usize {
         .values(login)
         .execute(conn) // get_results doesn't work with sqlite
         .expect("Failed to create new post")
+}
+// use models::*;
+// use crate::*;
+use self::schema::logins::dsl::*;
+// use diesel::prelude::*;
+// use self::models::Login;
+pub fn reveal(conn: &mut SqliteConnection, company: &str) -> Vec<Login> {
+    // use crate::schema::logins;
+    // use models::Login;
+    // use self::schema::logins::dsl::*;
+    // use diesel::prelude::*;
+    let _results = logins
+        .filter(company_id.eq(company))
+        .limit(1)
+        .load::<Login>(conn)
+        .expect("Error loading login");
+    _results
 }

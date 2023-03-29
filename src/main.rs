@@ -1,5 +1,6 @@
 use clap::Parser;
 // use wallit::{self, Args, Commands};
+use base64::engine::{general_purpose, Engine as _};
 use wallit::*;
 fn main() {
     println!("Hello, world!");
@@ -50,13 +51,22 @@ fn main() {
     println!("number of companies added: {}", _res);
 
     use self::models::NewLogin;
-
+    let orig = &general_purpose::STANDARD_NO_PAD.encode(b"zk$j7gq-0h");
     let new_login = &NewLogin {
         company_id: "citibank",
         username: "abc452",
-        password: "zk$j7gq-0h",
+        password: orig,
         email: "t9frq@awsai.io",
         history_id: 1,
     };
     add_login(&mut conn, new_login);
+    let res = reveal(&mut conn, "citibank");
+    for l in res {
+        println!("username {}", l.username);
+        let out = &general_purpose::STANDARD_NO_PAD.decode(l.password).unwrap();
+        // assert_eq!(b"zk$j7gq-0h", out);
+        println!("after decoding: {}", std::str::from_utf8(out).unwrap());
+
+        println!("username {}", l.email);
+    }
 }

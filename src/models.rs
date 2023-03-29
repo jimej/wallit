@@ -17,12 +17,12 @@ pub struct NewCompany<'a> {
 
 #[derive(Queryable)]
 pub struct Login {
-    pub id: u32,
+    pub id: i32,  // u32 has issues for reveal()
     pub company_id: String,
     pub username: String,
     pub password: String,
     pub email: String,
-    pub history_id: u32,
+    pub history_id: i32, // u32 has issues for reveal()
 }
 
 #[derive(Insertable)]

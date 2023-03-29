@@ -20,7 +20,7 @@ diesel::table! {
 
 diesel::table! {
     logins (id) {
-        id -> Nullable<Integer>,
+        id -> Integer,
         company_id -> Text,
         username -> Text,
         password -> Text,
