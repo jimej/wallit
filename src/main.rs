@@ -23,6 +23,7 @@ fn main() {
             };
             match tbl.as_str() {
                 "companies" => {
+                    use table_ops::companies::actions::add_company;
                     let _res = add_company(&mut conn, company, value);
                     println!("number of companies added: {}, name: {}", _res, company);
                 }
@@ -44,8 +45,6 @@ fn main() {
         assert_eq!(&out, input.as_bytes());
         println!("after decryption: {}", std::str::from_utf8(&out).unwrap());
     }
-
-    use table_ops::companies::actions::add_company;
 
     use table_ops::logins::models::NewLogin;
 
