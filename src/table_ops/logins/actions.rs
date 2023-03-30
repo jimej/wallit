@@ -9,7 +9,7 @@ pub fn add_login(conn: &mut SqliteConnection, login: &NewLogin) -> usize {
     diesel::insert_into(logins::table)
         .values(login)
         .execute(conn) // get_results doesn't work with sqlite
-        .expect("Failed to create new post")
+        .expect("Failed to create new login")
 }
 
 use crate::schema::logins::dsl::*;

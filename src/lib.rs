@@ -26,12 +26,32 @@ pub struct Args {
 
 #[derive(Subcommand, Debug)]
 pub enum Commands {
+    Show {
+        #[arg(short, long)]
+        tbl: String,
+        #[arg(short, long)]
+        all: bool,
+        #[arg(short, long)]
+        company: Option<String>,
+    },
     Add {
         #[arg(short, long)]
-        key: String,
+        tbl: String,
+        #[arg(short, long)]
+        company: String,
+        #[arg(short, long)]
+        value: Option<String>,
+    },
+
+    Rotate {
+        #[arg(short, long)]
+        tbl: String,
+        #[arg(short, long)]
+        company: String,
         #[arg(short, long)]
         value: String,
     },
+
     Delete {},
 }
 
@@ -69,7 +89,7 @@ impl Default for CipherMaterial {
 }
 
 pub mod schema;
-mod table_ops;
+pub mod table_ops;
 
 use diesel::prelude::*;
 use diesel::r2d2::{ConnectionManager, Pool};
@@ -85,3 +105,5 @@ pub fn get_connection_pool() -> Pool<ConnectionManager<SqliteConnection>> {
         .build(manager)
         .expect("could not build connection pool")
 }
+
+pub struct SecretGenerator;

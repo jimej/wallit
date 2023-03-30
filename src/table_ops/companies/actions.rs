@@ -13,5 +13,5 @@ pub fn add_company(conn: &mut SqliteConnection, companyid: &str, url: &str) -> u
     diesel::insert_into(companies::table)
         .values(&new_company)
         .execute(conn) // get_results doesn't work with sqlite
-        .expect("Failed to create new post")
+        .expect("Failed to add the new company")
 }
