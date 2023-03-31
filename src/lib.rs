@@ -1,6 +1,6 @@
 #![allow(dead_code, unused)]
 use aes_gcm_siv::{
-    aead::{Aead, AeadCore, KeyInit, OsRng},
+    aead::{Aead, AeadCore, KeyInit, OsRng, generic_array::GenericArray},
     Aes256GcmSiv, Nonce,
 };
 use clap::{Parser, Subcommand};
@@ -62,9 +62,12 @@ pub struct CipherMaterial {
 
 impl CipherMaterial {
     pub fn new() -> Self {
-        let key = Aes256GcmSiv::generate_key(&mut OsRng);
-        let cipher = Aes256GcmSiv::new(&key);
-        let nonce = Aes256GcmSiv::generate_nonce(&mut OsRng); // 96-bits; unique per message
+        //works: \x00\x65\x00\x00\x65\x00\x00\x00\x65\x00\x00\x65\x00\x00\x00\x65\x00\x00\x65\x00\x00\x00\x65\x00\x00\x65\x00\x00\x00\x65\x00\x00
+        let key = GenericArray::from_slice(b"v3rYHa$r-Dv3rYHa$r-Dv3rYHa$r-D&x");//must be 32 bytes = 256 bits //Aes256GcmSiv::generate_key(&mut OsRng); //from_iter("iter".as_bytes());
+        let cipher = Aes256GcmSiv::new(key);
+        //works: \x00\x65\x00\x00\x65\x00\x00\x00\x65\x00\x00\x65
+        let nonce = GenericArray::from_slice(b"nv-Qor1ngoi+").to_owned();//must be 12 bytes = 96 bits //Aes256GcmSiv::generate_nonce(&mut OsRng); // 96-bits; unique per message
+        
         CipherMaterial { cipher, nonce }
     }
 
