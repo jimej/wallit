@@ -15,7 +15,7 @@ fn main() {
             company,
             value,
         }) => {
-            println!("adding secrets {} {} {}", tbl, company, value.is_some());
+            println!("adding company {} {} {}", tbl, company, value.is_some());
             let value = if let Some(value) = value {
                 value
             } else {
@@ -28,10 +28,40 @@ fn main() {
                     println!("number of companies added: {}, name: {}", _res, company);
                 }
                 "logins" => (),
-                _ => (),
+                _ => println!("can't add to such table"),
             }
         }
-        _ => println!("not adding secrets"),
+        Some(Commands::Show { tbl, all, company }) => match tbl.as_str() {
+            "companies" => {
+                use self::schema::companies::dsl::*;
+                use diesel::prelude::*;
+                use table_ops::companies::models::Company;
+                if *all {
+                    let results: Vec<Company> = companies
+                        .limit(10)
+                        .load::<Company>(&mut conn)
+                        .expect("failed to load companies");
+                    for r in results {
+                        println!("{} {} ", r.company_id, r.url);
+                    }
+                } else if company.is_some() {
+                    let company = company.clone().unwrap();
+                    let results: Vec<Company> = companies
+                        .filter(company_id.eq(company))
+                        .load::<Company>(&mut conn)
+                        .expect("failed to load companies");
+                    for r in results {
+                        println!("{} {} ", r.company_id, r.url);
+                    }
+                } else {
+                    println!("wallit show -t [table] [-a] [-c company_id]");
+                }
+            }
+            "logins" => (),
+            "login_history" => (),
+            _ => (),
+        },
+        _ => println!("not allowed subcommand"),
     }
 
     let cm = wallit::CipherMaterial::default();

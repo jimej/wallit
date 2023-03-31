@@ -44,15 +44,15 @@ pub enum Commands {
     },
 
     Rotate {
-        #[arg(short, long)]
-        tbl: String,
+        // only for logins, so no tbl
         #[arg(short, long)]
         company: String,
         #[arg(short, long)]
-        value: String,
+        value: Option<String>,
     },
 
-    Delete {},
+    Delete {}, // no delete or modify subcommand; everything is audited
+               // for a book, will demo how to do it.
 }
 
 pub struct CipherMaterial {
@@ -106,4 +106,4 @@ pub fn get_connection_pool() -> Pool<ConnectionManager<SqliteConnection>> {
         .expect("could not build connection pool")
 }
 
-pub struct SecretGenerator;
+pub struct SecretGenerator; // for rotation

@@ -3,7 +3,7 @@ use diesel::prelude::*;
 
 #[derive(Queryable)]
 pub struct Company {
-    pub id: u32,
+    pub id: i32,
     pub company_id: String,
     pub url: String,
 }
