@@ -18,3 +18,5 @@ how to protect sqlite database file
 open source, take PR -> use ideas to create product
 
 cargo run -- add -t companies -c zzz540jty -v https://xz31.com
+
+capture remaining args as a vec

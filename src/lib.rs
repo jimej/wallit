@@ -41,6 +41,8 @@ pub enum Commands {
         company: String,
         #[arg(short, long)]
         value: Option<String>,
+        #[clap(trailing_var_arg=true)]
+        remaining: Option<Vec<String>>,
     },
 
     Rotate {

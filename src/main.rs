@@ -9,12 +9,15 @@ fn main() {
     let _debug = args.debug;
     let _pool = get_connection_pool();
     let mut conn = _pool.get().unwrap();
+    println!("{:?}", args);
     match &args.command {
         Some(Commands::Add {
             tbl,
             company,
             value,
+            remaining,
         }) => {
+            println!("{:?}", remaining);
             println!("adding company {} {} {}", tbl, company, value.is_some());
             let value = if let Some(value) = value {
                 value
