@@ -16,6 +16,11 @@ diesel::table! {
         username -> Text,
         password -> Text,
         history_id -> Integer,
+        url -> Nullable<Text>,
+        description -> Nullable<Text>,
+        loginLastModified -> Nullable<Text>,
+        mode -> Nullable<Text>,
+        lastModified -> Nullable<Text>,
     }
 }
 
