@@ -57,41 +57,6 @@ pub enum Commands {
                // for a book, will demo how to do it.
 }
 
-pub struct CipherMaterial {
-    cipher: Aes256GcmSiv,
-    nonce: Nonce,
-}
-
-impl CipherMaterial {
-    pub fn new() -> Self {
-        //works: \x00\x65\x00\x00\x65\x00\x00\x00\x65\x00\x00\x65\x00\x00\x00\x65\x00\x00\x65\x00\x00\x00\x65\x00\x00\x65\x00\x00\x00\x65\x00\x00
-        let key = GenericArray::from_slice(b"v3rYHa$r-Dv3rYHa$r-Dv3rYHa$r-D&x");//must be 32 bytes = 256 bits //Aes256GcmSiv::generate_key(&mut OsRng); //from_iter("iter".as_bytes());
-        let cipher = Aes256GcmSiv::new(key);
-        //works: \x00\x65\x00\x00\x65\x00\x00\x00\x65\x00\x00\x65
-        let nonce = GenericArray::from_slice(b"nv-Qor1ngoi+").to_owned();//must be 12 bytes = 96 bits //Aes256GcmSiv::generate_nonce(&mut OsRng); // 96-bits; unique per message
-        
-        CipherMaterial { cipher, nonce }
-    }
-
-    pub fn encrypt(&self, input: &str) -> Result<Vec<u8>, aes_gcm_siv::Error> {
-        let ciphertext = self
-            .cipher
-            .encrypt(&self.nonce, input.as_bytes().as_ref())?;
-        Ok(ciphertext)
-    }
-
-    pub fn decrypt(&self, ciphertext: Vec<u8>) -> Result<Vec<u8>, aes_gcm_siv::Error> {
-        let plaintext = self.cipher.decrypt(&self.nonce, ciphertext.as_ref())?; // aes_gcm_siv::Error is not std::error::Error
-                                                                                // assert_eq!(&plaintext, b"plaintext message");
-        Ok(plaintext)
-    }
-}
-
-impl Default for CipherMaterial {
-    fn default() -> Self {
-        Self::new()
-    }
-}
 
 pub mod schema;
 pub mod table_ops;

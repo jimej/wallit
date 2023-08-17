@@ -17,7 +17,7 @@ fn main() {
             value,
             remaining,
         }) => {
-            println!("{:?}", remaining);
+            println!("left over args {:?}", remaining);
             println!("adding company {} {} {}", tbl, company, value.is_some());
             let value = if let Some(value) = value {
                 value
@@ -67,27 +67,15 @@ fn main() {
         _ => println!("not allowed subcommand"),
     }
 
-    let cm = wallit::CipherMaterial::default();
-    let input = "input hello";
-    let res = cm.encrypt(input); // Ok(s), encrypted text can't conver to UTF-8 from bytes
-    println!("encryption success: {}", res.is_ok());
-    // println!("encrypted text: {}", std::str::from_utf8(&res).unwrap());
-    if let Ok(secret) = res {
-        println!("encrypted text: {:?}", secret);
-        let out = cm.decrypt(secret).unwrap();
-        assert_eq!(&out, input.as_bytes());
-        println!("after decryption: {}", std::str::from_utf8(&out).unwrap());
-    }
-
     use table_ops::logins::models::NewLogin;
 
     let p = "zk$j7gq-0h";
-    let enc = cm.encrypt(p).unwrap();
-    let orig = &general_purpose::STANDARD_NO_PAD.encode(enc);
+    // let enc = cm.encrypt(p).unwrap();
+    // let orig = &general_purpose::STANDARD_NO_PAD.encode(enc);
     let new_login = &NewLogin {
         company_id: "citibank",
         username: "abc452",
-        password: orig,
+        password: p,
         email: "t9frq@awsai.io",
         history_id: 1,
     };
@@ -96,10 +84,9 @@ fn main() {
     let res = reveal(&mut conn, "citibank");
     for l in res {
         println!("username {}", l.username);
-        let decoded = general_purpose::STANDARD_NO_PAD.decode(l.password).unwrap();
-        let outcome = cm.decrypt(decoded).unwrap();
+        // let outcome = cm.decrypt(decoded).unwrap();
         // assert_eq!(b"zk$j7gq-0h", out);
-        println!("after decoding: {}", std::str::from_utf8(&outcome).unwrap());
+        // println!("after decoding: {}", std::str::from_utf8(&outcome).unwrap());
 
         println!("username {}", l.email);
     }
