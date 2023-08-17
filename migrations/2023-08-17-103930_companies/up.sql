@@ -1,0 +1,1 @@
+ALTER TABLE companies ADD COLUMN testcol VARCHAR(255) NOT NULL DEFAULT 'test';

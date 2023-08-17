@@ -27,7 +27,7 @@ fn main() {
             match tbl.as_str() {
                 "companies" => {
                     use table_ops::companies::actions::add_company;
-                    let _res = add_company(&mut conn, company, value);
+                    let _res = add_company(&mut conn, company, value, "arbitrary");
                     println!("number of companies added: {}, name: {}", _res, company);
                 }
                 "logins" => (),

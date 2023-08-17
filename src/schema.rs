@@ -5,6 +5,7 @@ diesel::table! {
         id -> Integer,
         company_id -> Text,
         url -> Text,
+        testcol -> Text,
     }
 }
 
@@ -29,4 +30,8 @@ diesel::table! {
     }
 }
 
-diesel::allow_tables_to_appear_in_same_query!(companies, login_history, logins,);
+diesel::allow_tables_to_appear_in_same_query!(
+    companies,
+    login_history,
+    logins,
+);

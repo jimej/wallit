@@ -2,13 +2,14 @@ use super::models::*;
 // use diesel::r2d2::{ConnectionManager, Pool};
 use diesel::prelude::*;
 
-pub fn add_company(conn: &mut SqliteConnection, companyid: &str, url: &str) -> usize {
+pub fn add_company(conn: &mut SqliteConnection, companyid: &str, url: &str, testcol: &str) -> usize {
     use crate::schema::companies;
     // use models::*;
 
     let new_company = NewCompany {
         company_id: companyid,
         url,
+        testcol,
     };
     diesel::insert_into(companies::table)
         .values(&new_company)
