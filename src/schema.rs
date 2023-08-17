@@ -10,7 +10,7 @@ diesel::table! {
 }
 
 diesel::table! {
-    login_history (id) {
+    history (id) {
         id -> Nullable<Integer>,
         company_id -> Text,
         username -> Text,
@@ -35,6 +35,6 @@ diesel::table! {
 
 diesel::allow_tables_to_appear_in_same_query!(
     companies,
-    login_history,
+    history,
     logins,
 );

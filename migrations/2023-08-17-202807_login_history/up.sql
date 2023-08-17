@@ -1,0 +1,1 @@
+ALTER TABLE login_history RENAME TO history;
