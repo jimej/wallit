@@ -1,0 +1,3 @@
+ALTER TABLE logins ADD COLUMN url VARCHAR(255);
+ALTER TABLE logins ADD COLUMN description VARCHAR(255);
+ALTER TABLE logins ADD COLUMN lastModified TEXT;

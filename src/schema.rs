@@ -27,6 +27,9 @@ diesel::table! {
         password -> Text,
         email -> Text,
         history_id -> Integer,
+        url -> Text,
+        description -> Text,
+        lastModified -> Text,
     }
 }
 

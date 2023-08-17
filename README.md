@@ -20,3 +20,5 @@ open source, take PR -> use ideas to create product
 cargo run -- add -t companies -c zzz540jty -v https://xz31.com
 
 capture remaining args as a vec
+
+generated schema.rs - the primary key is nullable, remove it!
