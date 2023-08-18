@@ -41,6 +41,16 @@ pub enum Commands {
         company: String,
         #[arg(short, long)]
         value: Option<String>,
+        // #[arg(short, long)]
+        // username: Option<String>,
+        // #[arg(short, long)]
+        // password: Option<String>,
+        // #[arg(long)]
+        // url: Option<String>,
+        // #[arg(short, long)]
+        // email: Option<String>,
+        // #[arg(short, long)]
+        // description: Option<String>,
         #[clap(trailing_var_arg=true)]
         remaining: Option<Vec<String>>,
     },

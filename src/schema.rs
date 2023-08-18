@@ -28,10 +28,9 @@ diesel::table! {
     logins (id) {
         id -> Integer,
         company_id -> Text,
-        username -> Text,
+        login -> Text,
         password -> Text,
         email -> Text,
-        history_id -> Integer,
         url -> Text,
         description -> Text,
         lastModified -> Text,

@@ -2,12 +2,12 @@ use super::models::*;
 // use diesel::r2d2::{ConnectionManager, Pool};
 use diesel::prelude::*;
 
-pub fn add_login(conn: &mut SqliteConnection, login: &NewLogin) -> usize {
+pub fn add_login(conn: &mut SqliteConnection, l: &NewLogin) -> usize {
     use crate::schema::logins;
     // let new_company = NewCompany { company_id, url };
 
     diesel::insert_into(logins::table)
-        .values(login)
+        .values(l)
         .execute(conn) // get_results doesn't work with sqlite
         .expect("Failed to create new login")
 }

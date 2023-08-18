@@ -74,19 +74,18 @@ fn main() {
     // let orig = &general_purpose::STANDARD_NO_PAD.encode(enc);
     let new_login = &NewLogin {
         company_id: "standrpoor",
-        username: "abc452",
+        login: "abc452",
         password: p,
         email: "t9frq@awsai.io",
-        history_id: 1,
         description: "",
         url: "",
         lastModified: "",
     };
     use table_ops::logins::actions::{add_login, reveal};
-    add_login(&mut conn, new_login);
+    // add_login(&mut conn, new_login);
     let res = reveal(&mut conn, "etrade"); // using citibank (created before schema changes) Error loading login: DeserializationError(UnexpectedNullError)', src/table_ops/logins/actions.rs:21:10
     for l in res {
-        println!("username {}", l.username);
+        println!("username {}", l.login);
         // let outcome = cm.decrypt(decoded).unwrap();
         // assert_eq!(b"zk$j7gq-0h", out);
         // println!("after decoding: {}", std::str::from_utf8(&outcome).unwrap());
