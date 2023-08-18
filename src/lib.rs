@@ -28,31 +28,54 @@ pub struct Args {
 pub enum Commands {
     Show {
         #[arg(short, long)]
-        tbl: String,
-        #[arg(short, long)]
-        all: bool,
+        table: String,
+        // #[arg(short, long)]
+        // all: bool,
         #[arg(short, long)]
         company: Option<String>,
+        #[arg(short, long)]
+        limit: Option<i64>,
     },
     Add {
-        #[arg(short, long)]
-        tbl: String,
+        // #[arg(short, long)]
+        // table: String,
         #[arg(short, long)]
         company: String,
+        // #[arg(short, long)]
+        // value: Option<String>,
         #[arg(short, long)]
-        value: Option<String>,
+        login: Option<String>,
+        #[arg(short, long)]
+        password: Option<String>,
+        #[arg(long)]
+        url: Option<String>,
+        #[arg(short, long)]
+        email: Option<String>,
+        #[arg(short, long)]
+        description: Option<String>,
+        // #[clap(trailing_var_arg=true)]
+        // remaining: Option<Vec<String>>,
+    },
+
+    Update {
         // #[arg(short, long)]
-        // username: Option<String>,
+        // table: String,
+        #[arg(short, long)]
+        company: String,
         // #[arg(short, long)]
-        // password: Option<String>,
-        // #[arg(long)]
-        // url: Option<String>,
-        // #[arg(short, long)]
-        // email: Option<String>,
-        // #[arg(short, long)]
-        // description: Option<String>,
-        #[clap(trailing_var_arg=true)]
-        remaining: Option<Vec<String>>,
+        // value: Option<String>,
+        #[arg(short, long)]
+        login: Option<String>,
+        #[arg(short, long)]
+        password: Option<String>,
+        #[arg(long)]
+        url: Option<String>,
+        #[arg(short, long)]
+        email: Option<String>,
+        #[arg(short, long)]
+        description: Option<String>,
+        // #[clap(trailing_var_arg=true)]
+        // remaining: Option<Vec<String>>,
     },
 
     Rotate {
@@ -63,7 +86,10 @@ pub enum Commands {
         value: Option<String>,
     },
 
-    Delete {}, // no delete or modify subcommand; everything is audited
+    Delete {
+        #[arg(short, long)]
+        company: String,
+    }, // no delete or modify subcommand; everything is audited
                // for a book, will demo how to do it.
 }
 
