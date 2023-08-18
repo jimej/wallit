@@ -13,7 +13,7 @@ diesel::table! {
     history (id) {
         id -> Nullable<Integer>,
         company_id -> Text,
-        username -> Text,
+        login -> Text,
         password -> Text,
         history_id -> Integer,
         url -> Nullable<Text>,
