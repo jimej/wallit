@@ -21,6 +21,7 @@ diesel::table! {
         loginLastModified -> Text,
         mode -> Text,
         lastModified -> Text,
+        email -> Text,
     }
 }
 

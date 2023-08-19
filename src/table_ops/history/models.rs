@@ -13,7 +13,7 @@ pub struct History {
     pub loginLastModified: String,
     pub mode: String,
     pub lastModified: String,
-    
+    pub email: String,
 }
 
 #[derive(Insertable)]
@@ -28,5 +28,6 @@ pub struct NewHistory<'a> { // the field orders seem to be important here
     pub loginLastModified: &'a str,
     pub mode: &'a str,
     pub lastModified: &'a str,
+    pub email: &'a str,
     
 }

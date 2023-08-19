@@ -188,7 +188,7 @@ fn main() {
                 company_id: &r.company_id,
                 login: &r.login,
                 password: &r.password,
-                // email: &r.email,
+                email: &r.email,
                 description: &r.description,
                 url: &r.url,
                 loginLastModified: &r.lastModified,
