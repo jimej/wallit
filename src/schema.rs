@@ -11,16 +11,16 @@ diesel::table! {
 
 diesel::table! {
     history (id) {
-        id -> Nullable<Integer>,
+        id -> Integer,
         company_id -> Text,
         login -> Text,
         password -> Text,
         history_id -> Integer,
-        url -> Nullable<Text>,
-        description -> Nullable<Text>,
-        loginLastModified -> Nullable<Text>,
-        mode -> Nullable<Text>,
-        lastModified -> Nullable<Text>,
+        url -> Text,
+        description -> Text,
+        loginLastModified -> Text,
+        mode -> Text,
+        lastModified -> Text,
     }
 }
 

@@ -3,6 +3,7 @@ use clap::Parser;
 // use wallit::{self, Args, Commands};
 use base64::engine::{general_purpose, Engine as _};
 use wallit::*;
+use wallit::table_ops::history::models::NewHistory;
 // mod table_ops;
 use std::time::SystemTime;
 use chrono::offset::{Utc, Local};
@@ -142,6 +143,66 @@ fn main() {
             "history" => (), // this is essentially the same as logins; how to avoid duplication
             _ => (),
         },
+
+        Some(Commands::Delete{company}) => {
+            use self::schema::logins::dsl::{company_id, logins};
+            use diesel::prelude::*;
+                // use table_ops::logins::models::Login;
+
+            let company_exists = select(exists(logins
+                .filter(company_id.eq(company))))
+                .get_result::<bool>(&mut conn);
+            if !company_exists.unwrap() {
+                println!("can not delete nonexistent company {} in logins table", company);
+                return
+            }
+            
+            
+
+            // let company = company.clone().unwrap();
+            use table_ops::history::models::History;
+
+            use self::schema::history::dsl::{company_id as cid, history};
+            let result: Vec<History> = history
+                        .filter(cid.eq(company))
+                        .load::<History>(&mut conn)
+                        .expect("wallit show -t logins -c [company]");
+            let mut maximum = 0;
+            for r in result {
+                maximum =std::cmp::max(r.history_id, maximum);
+            }
+
+            use table_ops::logins::models::Login;
+            let result: Vec<Login> = logins
+                        .filter(company_id.eq(company))
+                        .load::<Login>(&mut conn)
+                        .expect("wallit show -t logins -c [company]");
+            let last_modified = SystemTime::now();
+            let last_modified: DateTime<Local> = last_modified.into();
+            let last_modified = last_modified.format("%Y-%m-%d %T");//%H:%M:%S
+            // use table_ops::history::models::NewHistory;
+            let r = result.first().unwrap();
+            // let mut new_history: &NewHistory;
+            // for r in result {
+            let    new_history = &NewHistory{
+                company_id: &r.company_id,
+                login: &r.login,
+                password: &r.password,
+                // email: &r.email,
+                description: &r.description,
+                url: &r.url,
+                loginLastModified: &r.lastModified,
+                lastModified: &last_modified.to_string(),
+                mode: "DELETE",
+                history_id: maximum + 1,
+                 };
+            // }
+        
+            use table_ops::history::actions::add_history;
+            add_history(&mut conn, new_history);
+
+        }
+
         _ => println!("not allowed subcommand"),
     }
 
