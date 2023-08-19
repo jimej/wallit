@@ -25,8 +25,9 @@ fn main() {
     let mut conn = _pool.get().unwrap();
     println!("{:?}", args);
     match &args.command {
-        Some(Commands::Add { // on command line the fields need to be single quoted if it has special characters such as space, &, ! etc...
+        Some(Commands::Add ( // on command line the fields need to be single quoted if it has special characters such as space, &, ! etc...
             // table,
+            SharedArgs{
             company,
             login,
             password,
@@ -34,7 +35,8 @@ fn main() {
             email,
             description,
             // remaining,
-        }) => {
+            }
+        )) => {
             // println!("left over args {:?}", remaining);
             println!("adding login {} {}",  company, login.is_some());
             let value = if let Some(value) = login {
@@ -85,6 +87,135 @@ fn main() {
             //     "logins" => (),
             //     _ => println!("can't add to such table"),
             // }
+        }
+        Some(Commands::Update(
+            SharedArgs{
+                company,
+                login,
+                password,
+                url,
+                email,
+                description,
+                // remaining,
+                }
+        )) => {
+            use self::schema::logins::dsl::{company_id, logins};
+            use diesel::prelude::*;
+            let company_exists = select(exists(logins
+                .filter(company_id.eq(company))))
+                .get_result::<bool>(&mut conn);
+            // println!("dooes it exist {}", company_exists.unwrap());
+            if !company_exists.unwrap() {
+                  println!("company {} doesn't exist", company);
+                  return;
+            }
+
+
+            
+            use table_ops::history::models::History;
+
+            use self::schema::history::dsl::{company_id as cid, history, history_id};
+            let result: Vec<History> = history
+                        .filter(cid.eq(company))
+                        .order(history_id.desc())
+                        .load::<History>(&mut conn)
+                        .expect("wallit show -t logins -c [company]");
+            let hist_id = if result.first().is_none() {
+                1
+            } else { result.first().unwrap().history_id +1};
+  
+            use table_ops::logins::models::Login;
+            let comp: Vec<Login> = logins
+                        .filter(company_id.eq(company))
+                        .load::<Login>(&mut conn)
+                        .expect("wallit show -t logins -c [company]");
+            let last_modified = SystemTime::now();
+            let last_modified: DateTime<Local> = last_modified.into();
+            let last_modified = last_modified.format("%Y-%m-%d %T");//%H:%M:%S
+            // use table_ops::history::models::NewHistory;
+            let r = comp.first().unwrap();
+            let    new_history = &NewHistory{
+                company_id: &r.company_id,
+                login: &r.login,
+                password: &r.password,
+                email: &r.email,
+                description: &r.description,
+                url: &r.url,
+                loginLastModified: &r.lastModified,
+                lastModified: &last_modified.to_string(),
+                mode: "DELETE",
+                history_id: hist_id,
+                 };
+
+            use self::schema::logins::dsl::{login as l, email as e, password as p, url as u, description as d, lastModified as lm};
+            // let mut v = vec![];
+            // _ = v.len();
+            // if login.is_some() {v.push(l.eq(login.unwrap()));};
+            // if password.is_some() {v.push(p.eq(password.unwrap()));};
+            // if url.is_some() {v.push(url);};
+            // if description.is_some() {v.push(description);};
+            // if email.is_some() {v.push(email);};
+
+            // let x = diesel::update(logins.filter(company_id.eq(company)))
+            //      .set((company_id.eq(company),l.eq("")));
+
+            // let new_login = &NewLogin {
+            //     company_id: company,
+            //     login: &login.clone().unwrap_or(None),
+            //     password: &password.clone().unwrap_or("".to_string()),
+            //     email: &email.clone().unwrap_or("".to_string()),
+            //     description: &description.clone().unwrap_or("".to_string()),
+            //     url: &url.clone().unwrap_or("".to_string()),
+            //     lastModified: &last_modified.to_string(),
+            // };
+            if login.is_some() {
+            let x = diesel::update(logins.filter(company_id.eq(company)))
+                 .set((company_id.eq(company), l.eq(login.clone().unwrap())))
+                 .get_result::<Login>(&mut conn); // doesn't work without https://stackoverflow.com/questions/74578751/diesel-get-results-gives-a-trait-bound-error
+                println!("login updated {}", x.unwrap().company_id);
+            }
+
+            if password.is_some() {
+                let x = diesel::update(logins.filter(company_id.eq(company)))
+                     .set((company_id.eq(company), p.eq(password.clone().unwrap())))
+                     .get_result::<Login>(&mut conn);
+                    println!("password updated {}", x.unwrap().company_id);
+                }
+            
+            if email.is_some() {
+                    let x = diesel::update(logins.filter(company_id.eq(company)))
+                         .set((company_id.eq(company), e.eq(email.clone().unwrap())))
+                         .get_result::<Login>(&mut conn);
+                        println!("email updated {}", x.unwrap().company_id);
+                    }
+            if url.is_some() {
+            let x = diesel::update(logins.filter(company_id.eq(company)))
+                 .set((company_id.eq(company), u.eq(url.clone().unwrap())))
+                 .get_result::<Login>(&mut conn);
+                println!("url updated {}", x.unwrap().company_id);
+            }
+            if description.is_some() {
+                let x = diesel::update(logins.filter(company_id.eq(company)))
+                     .set((company_id.eq(company), d.eq(description.clone().unwrap())))
+                     .get_result::<Login>(&mut conn);
+                    println!("description updated {}", x.unwrap().company_id);
+                }       
+
+                let last_modified = SystemTime::now();
+                let last_modified: DateTime<Local> = last_modified.into();
+                let last_modified = last_modified.format("%Y-%m-%d %T");//%H:%M:%S
+            
+            let x = diesel::update(logins.filter(company_id.eq(company)))
+                .set((company_id.eq(company), lm.eq(last_modified.to_string())))
+                .get_result::<Login>(&mut conn);
+               println!("lastModified updated {}", x.unwrap().company_id); 
+
+            use table_ops::history::actions::add_history;
+            add_history(&mut conn, new_history);
+           
+
+
+
         }
         Some(Commands::Show { table, company, limit }) => match table.as_str() {
             "companies" => {
@@ -167,7 +298,7 @@ fn main() {
                         .filter(cid.eq(company))
                         .load::<History>(&mut conn)
                         .expect("wallit show -t logins -c [company]");
-            let mut maximum = 0;
+            let mut maximum = 0; //todo: can we use usize - need to update model
             for r in result { // probably should sort by history_id descending, take the first record
                 maximum =std::cmp::max(r.history_id, maximum);
             }

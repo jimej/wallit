@@ -36,10 +36,10 @@ pub enum Commands {
         #[arg(short, long)]
         limit: Option<i64>,
     },
-    Add {
+    Add(SharedArgs) /*{
         // #[arg(short, long)]
         // table: String,
-        #[arg(short, long)]
+        // #[arg(short, long)]
         company: String,
         // #[arg(short, long)]
         // value: Option<String>,
@@ -55,15 +55,14 @@ pub enum Commands {
         description: Option<String>,
         // #[clap(trailing_var_arg=true)]
         // remaining: Option<Vec<String>>,
-    },
+    }*/,
 
-    Update {
-        // #[arg(short, long)]
-        // table: String,
+    Update(SharedArgs) /*{
+        
         #[arg(short, long)]
         company: String,
-        // #[arg(short, long)]
-        // value: Option<String>,
+        #[arg(short, long)]
+        value: Option<String>,
         #[arg(short, long)]
         login: Option<String>,
         #[arg(short, long)]
@@ -74,9 +73,9 @@ pub enum Commands {
         email: Option<String>,
         #[arg(short, long)]
         description: Option<String>,
-        // #[clap(trailing_var_arg=true)]
-        // remaining: Option<Vec<String>>,
-    },
+        #[clap(trailing_var_arg=true)]
+        remaining: Option<Vec<String>>,
+    }*/,
 
     Rotate {
         // only for logins, so no tbl
@@ -93,6 +92,23 @@ pub enum Commands {
                // for a book, will demo how to do it.
 }
 
+#[derive(clap::Args, Debug)]
+pub struct SharedArgs {
+    #[arg(short, long)]
+    pub company: String,
+    // #[arg(short, long)]
+    // value: Option<String>,
+    #[arg(short, long)]
+    pub login: Option<String>,
+    #[arg(short, long)]
+   pub  password: Option<String>,
+    #[arg(long)]
+    pub url: Option<String>,
+    #[arg(short, long)]
+    pub email: Option<String>,
+    #[arg(short, long)]
+    pub description: Option<String>,
+}
 
 pub mod schema;
 pub mod table_ops;

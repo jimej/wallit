@@ -15,7 +15,7 @@ pub struct Login {
     
 }
 
-#[derive(Insertable)]
+#[derive(Insertable)] //AsChangeset
 #[diesel(table_name = logins)]
 pub struct NewLogin<'a> { // the field orders seem to be important here
     pub company_id: &'a str,
