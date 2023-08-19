@@ -168,7 +168,7 @@ fn main() {
                         .load::<History>(&mut conn)
                         .expect("wallit show -t logins -c [company]");
             let mut maximum = 0;
-            for r in result {
+            for r in result { // probably should sort by history_id descending, take the first record
                 maximum =std::cmp::max(r.history_id, maximum);
             }
 
@@ -200,7 +200,9 @@ fn main() {
         
             use table_ops::history::actions::add_history;
             add_history(&mut conn, new_history);
-
+            //delete from logins and insert into history should be atomic; or insert first before deletion
+            _ = diesel::delete(logins.filter(company_id.eq(company))).execute(&mut conn);
+            
         }
 
         _ => println!("not allowed subcommand"),
