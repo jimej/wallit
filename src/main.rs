@@ -1,10 +1,23 @@
+// extern crate chrono;
 use clap::Parser;
 // use wallit::{self, Args, Commands};
 use base64::engine::{general_purpose, Engine as _};
 use wallit::*;
 // mod table_ops;
+use std::time::SystemTime;
+use chrono::offset::{Utc, Local};
+use chrono::DateTime;
+use diesel::dsl::{exists, select};
+
 fn main() {
     println!("Hello, world!");
+    let last_modified = SystemTime::now();
+    let last_modified: DateTime<Utc> = last_modified.into();
+    // last_modified.into::<DateTime<Utc>>().format("%Y-%m-%d %T"))
+    println!("{}", last_modified.format("%Y-%m-%d %T"));//%H:%M:%S
+    let last_modified: DateTime<Local> = last_modified.into();
+    println!("{}", last_modified.format("%Y-%m-%d %T"));//%H:%M:%S
+
     let args = Args::parse();
     let _debug = args.debug;
     let _pool = get_connection_pool();
@@ -28,6 +41,26 @@ fn main() {
             } else {
                 "https://test.url"
             };
+
+            use self::schema::logins::dsl::{company_id, logins};
+            use diesel::prelude::*;
+                // use table_ops::logins::models::Login;
+
+            let company_exists = select(exists(logins
+                .filter(company_id.eq(company))))
+                .get_result::<bool>(&mut conn);
+            // println!("dooes it exist {}", company_exists.unwrap());
+            if company_exists.unwrap() {
+                  println!("company {} exists already", company);
+                  println!("please use: wallit show -t logins -c {} to display login details", company);
+                  println!("use wallit update -c {} to update individual or several fields; see wallit update -h for help", company);
+                  return;
+            }
+            
+            // combine below three statments into one didn't work
+            let last_modified = SystemTime::now();
+            let last_modified: DateTime<Local> = last_modified.into();
+            let last_modified = last_modified.format("%Y-%m-%d %T");//%H:%M:%S
             let new_login = &NewLogin {
                 company_id: company,
                 login: &login.clone().unwrap_or("".to_string()),
@@ -35,11 +68,12 @@ fn main() {
                 email: &email.clone().unwrap_or("".to_string()),
                 description: &description.clone().unwrap_or("".to_string()),
                 url: &url.clone().unwrap_or("".to_string()),
-                lastModified: "",
+                lastModified: &last_modified.to_string(),
             };
 
             use table_ops::logins::actions::add_login;
             add_login(&mut conn, new_login);
+            println!("added login for company {}", company)
 
             // match table.as_str() {
             //     "companies" => {
@@ -81,6 +115,8 @@ fn main() {
                 use self::schema::logins::dsl::*;
                 use diesel::prelude::*;
                 use table_ops::logins::models::Login;
+
+                
                 if company.is_some() {
                     let company = company.clone().unwrap();
                     let result: Vec<Login> = logins
