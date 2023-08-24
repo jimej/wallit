@@ -11,19 +11,19 @@ use chrono::DateTime;
 use diesel::dsl::{exists, select};
 
 fn main() {
-    println!("Hello, world!");
-    let last_modified = SystemTime::now();
-    let last_modified: DateTime<Utc> = last_modified.into();
-    // last_modified.into::<DateTime<Utc>>().format("%Y-%m-%d %T"))
-    println!("{}", last_modified.format("%Y-%m-%d %T"));//%H:%M:%S
-    let last_modified: DateTime<Local> = last_modified.into();
-    println!("{}", last_modified.format("%Y-%m-%d %T"));//%H:%M:%S
+    // println!("Hello, world!");
+    // let last_modified = SystemTime::now();
+    // let last_modified: DateTime<Utc> = last_modified.into();
+    // // last_modified.into::<DateTime<Utc>>().format("%Y-%m-%d %T"))
+    // println!("{}", last_modified.format("%Y-%m-%d %T"));//%H:%M:%S
+    // let last_modified: DateTime<Local> = last_modified.into();
+    // println!("{}", last_modified.format("%Y-%m-%d %T"));//%H:%M:%S
 
     let args = Args::parse();
     let _debug = args.debug;
     let _pool = get_connection_pool();
     let mut conn = _pool.get().unwrap();
-    println!("{:?}", args);
+    // println!("{:?}", args);
     match &args.command {
         Some(Commands::Add ( // on command line the fields need to be single quoted if it has special characters such as space, &, ! etc...
             // table,
@@ -38,12 +38,12 @@ fn main() {
             }
         )) => {
             // println!("left over args {:?}", remaining);
-            println!("adding login {} {}",  company, login.is_some());
-            let value = if let Some(value) = login {
-                value
-            } else {
-                "https://test.url"
-            };
+            // println!("adding login {} {}",  company, login.is_some());
+            // let value = if let Some(value) = login {
+            //     value
+            // } else {
+            //     "https://test.url"
+            // };
 
             use self::schema::logins::dsl::{company_id, logins};
             use diesel::prelude::*;
@@ -55,8 +55,8 @@ fn main() {
             // println!("dooes it exist {}", company_exists.unwrap());
             if company_exists.unwrap() {
                   println!("company {} exists already", company);
-                  println!("please use: wallit show -t logins -c {} to display login details", company);
-                  println!("use wallit update -c {} to update individual or several fields; see wallit update -h for help", company);
+                  println!("please use: 'wallit show -t logins -c {}' to display login details", company);
+                  println!("use 'wallit update -c {}' to update individual or several fields; see wallit update -h for help", company);
                   return;
             }
             
@@ -119,7 +119,7 @@ fn main() {
                         .filter(cid.eq(company))
                         .order(history_id.desc())
                         .load::<History>(&mut conn)
-                        .expect("wallit show -t logins -c [company]");
+                        .expect("can't get history_id from history table");
             let hist_id = if result.first().is_none() {
                 1
             } else { result.first().unwrap().history_id +1};
@@ -143,7 +143,7 @@ fn main() {
                 url: &r.url,
                 loginLastModified: &r.lastModified,
                 lastModified: &last_modified.to_string(),
-                mode: "DELETE",
+                mode: "UPDATE",
                 history_id: hist_id,
                  };
 
@@ -172,7 +172,7 @@ fn main() {
             let x = diesel::update(logins.filter(company_id.eq(company)))
                  .set((company_id.eq(company), l.eq(login.clone().unwrap())))
                  .get_result::<Login>(&mut conn); // doesn't work without https://stackoverflow.com/questions/74578751/diesel-get-results-gives-a-trait-bound-error
-                println!("login updated {}", x.unwrap().company_id);
+                println!("login updated {}", x.unwrap().company_id);  // todo: these println strings should be concatenated
             }
 
             if password.is_some() {
@@ -255,6 +255,10 @@ fn main() {
                         .filter(company_id.eq(company))
                         .load::<Login>(&mut conn)
                         .expect("wallit show -t logins -c [company]");
+                    if result.is_empty() {
+                        println!("no such company found");
+                        return
+                    }
                     for r in result {
                         println!("{} {} {} {} {} {}", r.company_id, r.login, r.password, r.email, r.url, r.description)
                     }
@@ -271,7 +275,40 @@ fn main() {
                 }
 
             },
-            "history" => (), // this is essentially the same as logins; how to avoid duplication
+            "history" => { // this is essentially the same as logins; how to avoid duplication
+                use self::schema::history::dsl::*;
+                use diesel::prelude::*;
+                use table_ops::history::models::History;
+
+                
+                if company.is_some() { // todo: sort by history_id descending
+                    let company = company.clone().unwrap();
+                    let result: Vec<History> = history
+                        .filter(company_id.eq(company))
+                        .order(history_id.desc())
+                        .load::<History>(&mut conn)
+                        .expect("wallit show -t history -c [company]");
+                    if result.is_empty() {
+                        println!("no history record found");
+                        return
+                    }
+                    for r in result {
+                        println!("{} {} {} {} {} {}", r.company_id, r.login, r.password, r.email, r.url, r.description)
+                    }
+                } else if let Some(limit) = limit { // FIXME: sort by lastModified descending
+                    let result: Vec<History> = history
+                        .limit(*limit)
+                        .order(lastModified.desc())
+                        .load::<History>(&mut conn)
+                        .expect("wallit show -t history -l [limit]");
+                    for r in result {
+                        println!("{}", r.company_id)
+                    }
+                } else {
+                    println!("correct use: wallit show -t history -c [company] or wallit show -t history -l [limit]")
+                }
+
+            }, 
             _ => (),
         },
 
@@ -297,7 +334,7 @@ fn main() {
             let result: Vec<History> = history
                         .filter(cid.eq(company))
                         .load::<History>(&mut conn)
-                        .expect("wallit show -t logins -c [company]");
+                        .expect("can't load history table");
             let mut maximum = 0; //todo: can we use usize - need to update model
             for r in result { // probably should sort by history_id descending, take the first record
                 maximum =std::cmp::max(r.history_id, maximum);
@@ -307,7 +344,7 @@ fn main() {
             let result: Vec<Login> = logins
                         .filter(company_id.eq(company))
                         .load::<Login>(&mut conn)
-                        .expect("wallit show -t logins -c [company]");
+                        .expect("can't load logins table");
             let last_modified = SystemTime::now();
             let last_modified: DateTime<Local> = last_modified.into();
             let last_modified = last_modified.format("%Y-%m-%d %T");//%H:%M:%S
