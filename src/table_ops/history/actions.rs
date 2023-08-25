@@ -1,4 +1,3 @@
-
 use super::models::*;
 // use diesel::r2d2::{ConnectionManager, Pool};
 use diesel::prelude::*;

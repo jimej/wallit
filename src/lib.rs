@@ -1,6 +1,6 @@
 #![allow(dead_code, unused)]
 use aes_gcm_siv::{
-    aead::{Aead, AeadCore, KeyInit, OsRng, generic_array::GenericArray},
+    aead::{generic_array::GenericArray, Aead, AeadCore, KeyInit, OsRng},
     Aes256GcmSiv, Nonce,
 };
 use clap::{Parser, Subcommand};
@@ -36,46 +36,46 @@ pub enum Commands {
         #[arg(short, long)]
         limit: Option<i64>,
     },
-    Add(SharedArgs) /*{
-        // #[arg(short, long)]
-        // table: String,
-        // #[arg(short, long)]
-        company: String,
-        // #[arg(short, long)]
-        // value: Option<String>,
-        #[arg(short, long)]
-        login: Option<String>,
-        #[arg(short, long)]
-        password: Option<String>,
-        #[arg(long)]
-        url: Option<String>,
-        #[arg(short, long)]
-        email: Option<String>,
-        #[arg(short, long)]
-        description: Option<String>,
-        // #[clap(trailing_var_arg=true)]
-        // remaining: Option<Vec<String>>,
-    }*/,
+    Add(SharedArgs), /*{
+                         // #[arg(short, long)]
+                         // table: String,
+                         // #[arg(short, long)]
+                         company: String,
+                         // #[arg(short, long)]
+                         // value: Option<String>,
+                         #[arg(short, long)]
+                         login: Option<String>,
+                         #[arg(short, long)]
+                         password: Option<String>,
+                         #[arg(long)]
+                         url: Option<String>,
+                         #[arg(short, long)]
+                         email: Option<String>,
+                         #[arg(short, long)]
+                         description: Option<String>,
+                         // #[clap(trailing_var_arg=true)]
+                         // remaining: Option<Vec<String>>,
+                     }*/
 
-    Update(SharedArgs) /*{
-        
-        #[arg(short, long)]
-        company: String,
-        #[arg(short, long)]
-        value: Option<String>,
-        #[arg(short, long)]
-        login: Option<String>,
-        #[arg(short, long)]
-        password: Option<String>,
-        #[arg(long)]
-        url: Option<String>,
-        #[arg(short, long)]
-        email: Option<String>,
-        #[arg(short, long)]
-        description: Option<String>,
-        #[clap(trailing_var_arg=true)]
-        remaining: Option<Vec<String>>,
-    }*/,
+    Update(SharedArgs), /*{
+
+                            #[arg(short, long)]
+                            company: String,
+                            #[arg(short, long)]
+                            value: Option<String>,
+                            #[arg(short, long)]
+                            login: Option<String>,
+                            #[arg(short, long)]
+                            password: Option<String>,
+                            #[arg(long)]
+                            url: Option<String>,
+                            #[arg(short, long)]
+                            email: Option<String>,
+                            #[arg(short, long)]
+                            description: Option<String>,
+                            #[clap(trailing_var_arg=true)]
+                            remaining: Option<Vec<String>>,
+                        }*/
 
     Rotate {
         // only for logins, so no tbl
@@ -89,7 +89,7 @@ pub enum Commands {
         #[arg(short, long)]
         company: String,
     }, // no delete or modify subcommand; everything is audited
-               // for a book, will demo how to do it.
+       // for a book, will demo how to do it.
 }
 
 #[derive(clap::Args, Debug)]
@@ -101,7 +101,7 @@ pub struct SharedArgs {
     #[arg(short, long)]
     pub login: Option<String>,
     #[arg(short, long)]
-   pub  password: Option<String>,
+    pub password: Option<String>,
     #[arg(long)]
     pub url: Option<String>,
     #[arg(short, long)]
