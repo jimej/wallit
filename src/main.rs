@@ -67,6 +67,7 @@ fn main() {
             let last_modified = SystemTime::now();
             let last_modified: DateTime<Local> = last_modified.into();
             let last_modified = last_modified.format("%Y-%m-%d %T"); //%H:%M:%S
+            use table_ops::logins::models::NewLogin;
             let new_login = &NewLogin {
                 company_id: company,
                 login: &login.clone().unwrap_or("".to_string()),
@@ -221,7 +222,7 @@ fn main() {
             company,
             limit,
         }) => match table.as_str() {
-            "companies" => {
+            // "companies" => {
                 // use self::schema::companies::dsl::*;
                 // use diesel::prelude::*;
                 // use table_ops::companies::models::Company;
@@ -245,7 +246,7 @@ fn main() {
                 // } else {
                 //     println!("wallit show -t [table] [-a] [-c company_id]");
                 // }
-            }
+            // }
             "logins" => {
                 use self::schema::logins::dsl::*;
                 use diesel::prelude::*;
@@ -384,29 +385,29 @@ fn main() {
         _ => println!("not allowed subcommand"),
     }
 
-    use table_ops::logins::models::NewLogin;
+    // use table_ops::logins::models::NewLogin;
 
-    let p = "zk$j7gq-0h";
-    // let enc = cm.encrypt(p).unwrap();
-    // let orig = &general_purpose::STANDARD_NO_PAD.encode(enc);
-    let new_login = &NewLogin {
-        company_id: "standrpoor",
-        login: "abc452",
-        password: p,
-        email: "t9frq@awsai.io",
-        description: "",
-        url: "",
-        lastModified: "",
-    };
-    use table_ops::logins::actions::reveal;
-    // add_login(&mut conn, new_login);
-    let res = reveal(&mut conn, "etrade"); // using citibank (created before schema changes) Error loading login: DeserializationError(UnexpectedNullError)', src/table_ops/logins/actions.rs:21:10
-    for l in res {
-        println!("username {}", l.login);
-        // let outcome = cm.decrypt(decoded).unwrap();
-        // assert_eq!(b"zk$j7gq-0h", out);
-        // println!("after decoding: {}", std::str::from_utf8(&outcome).unwrap());
+    // let p = "zk$j7gq-0h";
+    // // let enc = cm.encrypt(p).unwrap();
+    // // let orig = &general_purpose::STANDARD_NO_PAD.encode(enc);
+    // let new_login = &NewLogin {
+    //     company_id: "standrpoor",
+    //     login: "abc452",
+    //     password: p,
+    //     email: "t9frq@awsai.io",
+    //     description: "",
+    //     url: "",
+    //     lastModified: "",
+    // };
+    // use table_ops::logins::actions::reveal;
+    // // add_login(&mut conn, new_login);
+    // let res = reveal(&mut conn, "etrade"); // using citibank (created before schema changes) Error loading login: DeserializationError(UnexpectedNullError)', src/table_ops/logins/actions.rs:21:10
+    // for l in res {
+    //     println!("username {}", l.login);
+    //     // let outcome = cm.decrypt(decoded).unwrap();
+    //     // assert_eq!(b"zk$j7gq-0h", out);
+    //     // println!("after decoding: {}", std::str::from_utf8(&outcome).unwrap());
 
-        println!("username {}", l.email);
-    }
+    //     println!("username {}", l.email);
+    // }
 }
