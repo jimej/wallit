@@ -2,6 +2,7 @@
 use clap::Parser;
 // use wallit::{self, Args, Commands};
 use base64::engine::{general_purpose, Engine as _};
+use diesel::result;
 use wallit::table_ops::history::models::NewHistory;
 use wallit::*;
 // mod table_ops;
@@ -219,6 +220,7 @@ fn main() {
         }
         Some(Commands::Show {
             table,
+            like,
             company,
             limit,
         }) => match table.as_str() {
@@ -251,6 +253,19 @@ fn main() {
                 use self::schema::logins::dsl::*;
                 use diesel::prelude::*;
                 use table_ops::logins::models::Login;
+
+                if like.is_some() {
+                    let pattern = like.clone().unwrap();
+                    let result: Vec<String> = logins
+                        .select(company_id)
+                        .filter(company_id.like(pattern))
+                        .load::<String>(&mut conn)
+                        .expect("wallit show -t logins --like/-s [pattern]");
+                    for r in result {
+                        println!("{}", r);
+                    }
+                    return;
+                }
 
                 if company.is_some() {
                     let company = company.clone().unwrap();

@@ -31,6 +31,8 @@ pub enum Commands {
         table: String,
         // #[arg(short, long)]
         // all: bool,
+        #[arg(long, short = 's')]
+        like: Option<String>,
         #[arg(short, long)]
         company: Option<String>,
         #[arg(short, long)]
