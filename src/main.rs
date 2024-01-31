@@ -223,29 +223,29 @@ fn main() {
             limit,
         }) => match table.as_str() {
             // "companies" => {
-                // use self::schema::companies::dsl::*;
-                // use diesel::prelude::*;
-                // use table_ops::companies::models::Company;
-                // if *all {
-                //     let results: Vec<Company> = companies
-                //         .limit(10)
-                //         .load::<Company>(&mut conn)
-                //         .expect("failed to load companies");
-                //     for r in results {
-                //         println!("{} {} ", r.company_id, r.url);
-                //     }
-                // } else if company.is_some() {
-                //     let company = company.clone().unwrap();
-                //     let results: Vec<Company> = companies
-                //         .filter(company_id.eq(company))
-                //         .load::<Company>(&mut conn)
-                //         .expect("failed to load companies");
-                //     for r in results {
-                //         println!("{} {} ", r.company_id, r.url);
-                //     }
-                // } else {
-                //     println!("wallit show -t [table] [-a] [-c company_id]");
-                // }
+            // use self::schema::companies::dsl::*;
+            // use diesel::prelude::*;
+            // use table_ops::companies::models::Company;
+            // if *all {
+            //     let results: Vec<Company> = companies
+            //         .limit(10)
+            //         .load::<Company>(&mut conn)
+            //         .expect("failed to load companies");
+            //     for r in results {
+            //         println!("{} {} ", r.company_id, r.url);
+            //     }
+            // } else if company.is_some() {
+            //     let company = company.clone().unwrap();
+            //     let results: Vec<Company> = companies
+            //         .filter(company_id.eq(company))
+            //         .load::<Company>(&mut conn)
+            //         .expect("failed to load companies");
+            //     for r in results {
+            //         println!("{} {} ", r.company_id, r.url);
+            //     }
+            // } else {
+            //     println!("wallit show -t [table] [-a] [-c company_id]");
+            // }
             // }
             "logins" => {
                 use self::schema::logins::dsl::*;
