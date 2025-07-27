@@ -355,30 +355,4 @@ fn main() {
 
         _ => println!("not allowed subcommand"),
     }
-
-    // use table_ops::logins::models::NewLogin;
-
-    // let p = "zk$j7gq-0h";
-    // // let enc = cm.encrypt(p).unwrap();
-    // // let orig = &general_purpose::STANDARD_NO_PAD.encode(enc);
-    // let new_login = &NewLogin {
-    //     company_id: "standrpoor",
-    //     login: "abc452",
-    //     password: p,
-    //     email: "t9frq@awsai.io",
-    //     description: "",
-    //     url: "",
-    //     lastModified: "",
-    // };
-    // use table_ops::logins::actions::reveal;
-    // // add_login(&mut conn, new_login);
-    // let res = reveal(&mut conn, "etrade"); // using citibank (created before schema changes) Error loading login: DeserializationError(UnexpectedNullError)', src/table_ops/logins/actions.rs:21:10
-    // for l in res {
-    //     println!("username {}", l.login);
-    //     // let outcome = cm.decrypt(decoded).unwrap();
-    //     // assert_eq!(b"zk$j7gq-0h", out);
-    //     // println!("after decoding: {}", std::str::from_utf8(&outcome).unwrap());
-
-    //     println!("username {}", l.email);
-    // }
 }
