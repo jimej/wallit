@@ -12,14 +12,6 @@ use diesel::dsl::{exists, select};
 use std::time::SystemTime;
 
 fn main() {
-    // println!("Hello, world!");
-    // let last_modified = SystemTime::now();
-    // let last_modified: DateTime<Utc> = last_modified.into();
-    // // last_modified.into::<DateTime<Utc>>().format("%Y-%m-%d %T"))
-    // println!("{}", last_modified.format("%Y-%m-%d %T"));//%H:%M:%S
-    // let last_modified: DateTime<Local> = last_modified.into();
-    // println!("{}", last_modified.format("%Y-%m-%d %T"));//%H:%M:%S
-
     let args = Args::parse();
     let _debug = args.debug;
     let _pool = get_connection_pool();
@@ -39,14 +31,6 @@ fn main() {
                 // remaining,
             },
         )) => {
-            // println!("left over args {:?}", remaining);
-            // println!("adding login {} {}",  company, login.is_some());
-            // let value = if let Some(value) = login {
-            //     value
-            // } else {
-            //     "https://test.url"
-            // };
-
             use self::schema::logins::dsl::{company_id, logins};
             use diesel::prelude::*;
             // use table_ops::logins::models::Login;
@@ -82,16 +66,6 @@ fn main() {
             use table_ops::logins::actions::add_login;
             add_login(&mut conn, new_login);
             println!("added login for company {}", company)
-
-            // match table.as_str() {
-            //     "companies" => {
-            //         use table_ops::companies::actions::add_company;
-            //         let _res = add_company(&mut conn, company, value, "arbitrary");
-            //         println!("number of companies added: {}, name: {}", _res, company);
-            //     }
-            //     "logins" => (),
-            //     _ => println!("can't add to such table"),
-            // }
         }
         Some(Commands::Update(SharedArgs {
             company,
