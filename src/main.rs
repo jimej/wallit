@@ -153,26 +153,7 @@ fn main() {
                 description as d, email as e, lastModified as lm, login as l, password as p,
                 url as u,
             };
-            // let mut v = vec![];
-            // _ = v.len();
-            // if login.is_some() {v.push(l.eq(login.unwrap()));};
-            // if password.is_some() {v.push(p.eq(password.unwrap()));};
-            // if url.is_some() {v.push(url);};
-            // if description.is_some() {v.push(description);};
-            // if email.is_some() {v.push(email);};
 
-            // let x = diesel::update(logins.filter(company_id.eq(company)))
-            //      .set((company_id.eq(company),l.eq("")));
-
-            // let new_login = &NewLogin {
-            //     company_id: company,
-            //     login: &login.clone().unwrap_or(None),
-            //     password: &password.clone().unwrap_or("".to_string()),
-            //     email: &email.clone().unwrap_or("".to_string()),
-            //     description: &description.clone().unwrap_or("".to_string()),
-            //     url: &url.clone().unwrap_or("".to_string()),
-            //     lastModified: &last_modified.to_string(),
-            // };
             if login.is_some() {
                 let x = diesel::update(logins.filter(company_id.eq(company)))
                     .set((company_id.eq(company), l.eq(login.clone().unwrap())))
@@ -224,31 +205,6 @@ fn main() {
             company,
             limit,
         }) => match table.as_str() {
-            // "companies" => {
-            // use self::schema::companies::dsl::*;
-            // use diesel::prelude::*;
-            // use table_ops::companies::models::Company;
-            // if *all {
-            //     let results: Vec<Company> = companies
-            //         .limit(10)
-            //         .load::<Company>(&mut conn)
-            //         .expect("failed to load companies");
-            //     for r in results {
-            //         println!("{} {} ", r.company_id, r.url);
-            //     }
-            // } else if company.is_some() {
-            //     let company = company.clone().unwrap();
-            //     let results: Vec<Company> = companies
-            //         .filter(company_id.eq(company))
-            //         .load::<Company>(&mut conn)
-            //         .expect("failed to load companies");
-            //     for r in results {
-            //         println!("{} {} ", r.company_id, r.url);
-            //     }
-            // } else {
-            //     println!("wallit show -t [table] [-a] [-c company_id]");
-            // }
-            // }
             "logins" => {
                 use self::schema::logins::dsl::*;
                 use diesel::prelude::*;

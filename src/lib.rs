@@ -38,46 +38,9 @@ pub enum Commands {
         #[arg(short, long)]
         limit: Option<i64>,
     },
-    Add(SharedArgs), /*{
-                         // #[arg(short, long)]
-                         // table: String,
-                         // #[arg(short, long)]
-                         company: String,
-                         // #[arg(short, long)]
-                         // value: Option<String>,
-                         #[arg(short, long)]
-                         login: Option<String>,
-                         #[arg(short, long)]
-                         password: Option<String>,
-                         #[arg(long)]
-                         url: Option<String>,
-                         #[arg(short, long)]
-                         email: Option<String>,
-                         #[arg(short, long)]
-                         description: Option<String>,
-                         // #[clap(trailing_var_arg=true)]
-                         // remaining: Option<Vec<String>>,
-                     }*/
+    Add(SharedArgs),
 
-    Update(SharedArgs), /*{
-
-                            #[arg(short, long)]
-                            company: String,
-                            #[arg(short, long)]
-                            value: Option<String>,
-                            #[arg(short, long)]
-                            login: Option<String>,
-                            #[arg(short, long)]
-                            password: Option<String>,
-                            #[arg(long)]
-                            url: Option<String>,
-                            #[arg(short, long)]
-                            email: Option<String>,
-                            #[arg(short, long)]
-                            description: Option<String>,
-                            #[clap(trailing_var_arg=true)]
-                            remaining: Option<Vec<String>>,
-                        }*/
+    Update(SharedArgs),
 
     Rotate {
         // only for logins, so no tbl
