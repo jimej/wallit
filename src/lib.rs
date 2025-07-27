@@ -104,7 +104,7 @@ pub struct SharedArgs {
     pub login: Option<String>,
     #[arg(short, long)]
     pub password: Option<String>,
-    #[arg(long)]
+    #[arg(short, long)]
     pub url: Option<String>,
     #[arg(short, long)]
     pub email: Option<String>,
